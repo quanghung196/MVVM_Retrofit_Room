@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/progress_dialog_width"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginRight="@dimen/progress_dialog_margin"
+    android:layout_marginLeft="@dimen/progress_dialog_margin"
+    app:cardCornerRadius="@dimen/progress_dialog_radius">
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/progress_dialog_padding">
+
+        <com.github.ybq.android.spinkit.SpinKitView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/spin_kit"
+            style="@style/SpinKitView.Circle"
+            android:layout_width="@dimen/progress_dialog_spin"
+            android:layout_height="@dimen/progress_dialog_spin"
+            app:SpinKit_Color="@color/blueAtoll" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/progress_dialog_title_margin"
+            android:fontFamily="@font/vag_rounded"
+            android:text="@string/progress_dialog_title"
+            android:textColor="@color/black"
+            android:textSize="@dimen/progress_dialog_title_size" />
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>

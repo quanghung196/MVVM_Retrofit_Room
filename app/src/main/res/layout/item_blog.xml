@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="blog"
+            type="com.example.mvvm_retrofit_room.model.Blog" />
+
+        <variable
+            name="viewModel"
+            type="com.example.mvvm_retrofit_room.viewmodel.BlogListFragmentViewModel" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/user_card_margin"
+        android:elevation="@dimen/user_card_elevator"
+        android:onClick="@{() -> viewModel.onUserClicked(blog)}"
+        app:cardCornerRadius="@dimen/user_card_radius">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/user_card_padding">
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/ivBlogImage"
+                app:riv_corner_radius="@dimen/item_thumbnail_radius"
+                imageURL="@{blog.blogImageURL}"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_thumbnail_height"
+                android:scaleType="fitXY"
+                android:src="@drawable/demo_pic" />
+
+            <TextView
+                android:id="@+id/tvBlogTitle"
+                style="@style/ItemBoldText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{blog.blogTitle}" />
+
+            <TextView
+                android:id="@+id/tvBlogDescription"
+                style="@style/ItemNormalText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{blog.blogDescription}" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

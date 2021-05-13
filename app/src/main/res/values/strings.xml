@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">MVVM_Retrofit_Room</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="hint_blog_title">Blog Title</string>
+    <string name="hint_blog_description">Blog Description</string>
+
+    <string name="btn_action_add">Add</string>
+    <string name="btn_action_edit">Edit</string>
+    <string name="btn_action_delete">Delete</string>
+    <string name="progress_dialog_title">Please wait...</string>
+</resources>

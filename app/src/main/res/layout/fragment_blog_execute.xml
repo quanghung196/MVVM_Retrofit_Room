@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="handleBlogExecuteFrmEvent"
+            type="com.example.mvvm_retrofit_room.view.fragment.BlogExecuteFragment" />
+
+        <variable
+            name="blog"
+            type="com.example.mvvm_retrofit_room.model.Blog" />
+
+        <variable
+            name="viewModel"
+            type="com.example.mvvm_retrofit_room.viewmodel.ExecuteBlogFragmentViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/relativeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/backgroundColor"
+        android:orientation="vertical"
+        tools:context=".ui.fragment.ExecuteFragment">
+
+        <LinearLayout
+            android:id="@+id/linearBlog"
+            style="@style/ExecuteInformation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/view_group_to_parent"
+            android:orientation="vertical">
+
+            <!--imageURL="@{blog.blogImageURL}"-->
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/ivBlogImage"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/image_height"
+                android:onClick="@{()-> handleBlogExecuteFrmEvent.onImageClicked()}"
+                android:scaleType="fitXY"
+                android:src="@drawable/demo_pic"
+                app:riv_corner_radius="@dimen/user_card_radius">
+
+            </com.makeramen.roundedimageview.RoundedImageView>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilBlogTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/view_group_to_parent"
+                android:hint="@string/hint_blog_title"
+                app:endIconMode="clear_text">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/UserEditTextInformation"
+                    android:id="@+id/titBlogTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:text="@{blog.blogTitle}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilBlogDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/view_group_to_view_group"
+                android:hint="@string/hint_blog_description"
+                app:endIconMode="clear_text">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/UserEditTextInformation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/titBlogDescription"
+                    android:background="@color/white"
+                    android:text="@{blog.blogDescription}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearExecute"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linearBlog"
+            android:layout_marginTop="@dimen/view_group_to_view_group"
+            android:orientation="horizontal">
+
+            <Button
+                android:onClick="@{()-> handleBlogExecuteFrmEvent.deleteCurrentBlog()}"
+                android:id="@+id/btnDelete"
+                style="@style/ExecuteButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/btn_action_delete" />
+
+            <Button
+                android:id="@+id/btnEdit"
+                style="@style/ExecuteButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/btn_action_edit" />
+
+            <Button
+                android:onClick="@{()-> handleBlogExecuteFrmEvent.addNewBlog()}"
+                android:id="@+id/btnAdd"
+                style="@style/ExecuteButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/btn_action_add" />
+        </LinearLayout>
+
+    </RelativeLayout>
+</layout>

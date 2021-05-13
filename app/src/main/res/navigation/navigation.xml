@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/blogListFragment">
+
+    <fragment
+        android:id="@+id/blogListFragment"
+        android:name="com.example.mvvm_retrofit_room.view.fragment.BlogListFragment"
+        android:label="fragment_blog_list"
+        tools:layout="@layout/fragment_blog_list" >
+        <action
+            android:id="@+id/action_blogListFragment_to_blogExecuteFragment"
+            app:destination="@id/blogExecuteFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:popExitAnim="@anim/exit_to_left" />
+    </fragment>
+    <fragment
+        android:id="@+id/blogExecuteFragment"
+        android:name="com.example.mvvm_retrofit_room.view.fragment.BlogExecuteFragment"
+        android:label="fragment_blog_execute"
+        tools:layout="@layout/fragment_blog_execute" >
+        <action
+            android:id="@+id/action_blogExecuteFragment_to_blogListFragment"
+            app:destination="@id/blogListFragment"
+            app:popUpTo="@id/blogListFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="blog"
+            app:argType="com.example.mvvm_retrofit_room.model.Blog" />
+    </fragment>
+</navigation>
