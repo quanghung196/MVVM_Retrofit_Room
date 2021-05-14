@@ -43,14 +43,14 @@ class BlogListFragment : BaseFragment<FragmentBlogListBinding, BlogListFragmentV
         }
     }
 
+    //chuyển sang fragment edit/delete
     override fun onBlogClicked(blog: Blog) {
         val action =
-            BlogListFragmentDirections.actionBlogListFragmentToBlogExecuteFragment(
-                blog
-            )
+            BlogListFragmentDirections.actionBlogListFragmentToBlogExecuteFragment(blog)
         view?.let { Navigation.findNavController(it).navigate(action) }
     }
 
+    //chuyển sang fragment add
     fun addNewBlog() {
         mBlog = Blog("", "", "")
         val action =
@@ -58,9 +58,7 @@ class BlogListFragment : BaseFragment<FragmentBlogListBinding, BlogListFragmentV
         view?.let { Navigation.findNavController(it).navigate(action) }
     }
 
-    /*
-    * get data từ api
-    * */
+    //lấy data trên server
     private fun refreshData() {
         viewModel.getAllBlogFromServer().observe(viewLifecycleOwner, Observer {
             it?.let { resource ->
@@ -86,9 +84,7 @@ class BlogListFragment : BaseFragment<FragmentBlogListBinding, BlogListFragmentV
         })
     }
 
-    /*
-    * funtion getData từ room nếu không load được data từ api
-    * */
+    //lấy data từ room
     private fun getDataFromDatabase(){
         viewModel.getAllBlogFromDatabase().observe(viewLifecycleOwner, Observer {
             mBlogAdapter.submitData(it)

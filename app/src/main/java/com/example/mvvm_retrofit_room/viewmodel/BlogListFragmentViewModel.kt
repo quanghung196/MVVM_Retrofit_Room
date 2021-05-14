@@ -18,6 +18,7 @@ class BlogListFragmentViewModel() : ViewModel() {
     private val mBlogRepository: BlogRepository = BlogRepository()
     private lateinit var blogListener: BlogListener
 
+    //lấy data từ api
     fun getAllBlogFromServer() = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
         try {
@@ -27,14 +28,17 @@ class BlogListFragmentViewModel() : ViewModel() {
         }
     }
 
+    //đồng bộ data từ api vào room
     fun synchronizeAllBlogFromServer(blogs: List<Blog>) = viewModelScope.launch {
         mBlogRepository.synchronizeAllBlogFromServer(blogs)
     }
 
+    //xóa hết data trong room
     fun deteleAllBlogFromDatabase() = viewModelScope.launch {
         mBlogRepository.deteleAllBlogFromDatabase()
     }
 
+    //lấy data từ room
     fun getAllBlogFromDatabase(): LiveData<List<Blog>> = mBlogRepository.getAllBlogFromDatabase()
 
     fun setBlogListener(blogListener: BlogListener) {

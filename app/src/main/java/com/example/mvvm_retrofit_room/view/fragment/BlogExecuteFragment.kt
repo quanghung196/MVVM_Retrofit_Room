@@ -59,6 +59,7 @@ class BlogExecuteFragment :
         }
     }
 
+    //về fragment list
     fun backToBlogListFragment() {
         view?.let {
             Navigation.findNavController(it)
@@ -66,6 +67,7 @@ class BlogExecuteFragment :
         }
     }
 
+    //add data lên server
     fun addNewBlog() {
         getNewBlog()
         mEditTextList.clear()
@@ -97,6 +99,7 @@ class BlogExecuteFragment :
         clearText()
     }
 
+    //xóa data trên server
     fun deleteCurrentBlog() {
         viewModel.deleteCurrentBlog(mBlog.blogID).observe(viewLifecycleOwner, Observer {
             it?.let { resource ->
@@ -120,6 +123,7 @@ class BlogExecuteFragment :
         })
     }
 
+    //get text từ edittext
     private fun getNewBlog() {
         mBlog.blogTitle = binding.titBlogTitle.text.toString()
         mBlog.blogDescription = binding.titBlogDescription.text.toString()

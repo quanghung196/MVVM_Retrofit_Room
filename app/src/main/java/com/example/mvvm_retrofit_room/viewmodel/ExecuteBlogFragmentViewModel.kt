@@ -16,19 +16,7 @@ class ExecuteBlogFragmentViewModel : ViewModel() {
 
     private val mBlogRepository: BlogRepository = BlogRepository()
 
-    /*fun insertUser(user: User) = viewModelScope.launch {
-       mUserRepository.insertUser(user)
-   }
-
-   fun updateUser(user: User) = viewModelScope.launch {
-       mUserRepository.updateUser(user)
-   }
-
-   fun deleteUser(user: User) = viewModelScope.launch {
-       mUserRepository.deleteUser(user)
-   }
-
-   fun getUserByID(userID: Int): User = mUserRepository.getUserByID(userID)*/
+    //add data lên server
     fun addNewBlogToServer(blog: Blog) = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
         try {
@@ -38,6 +26,7 @@ class ExecuteBlogFragmentViewModel : ViewModel() {
         }
     }
 
+    //xóa data trên server
     fun deleteCurrentBlog(blogID: String) = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
         try {
