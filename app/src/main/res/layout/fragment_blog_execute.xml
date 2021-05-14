@@ -34,14 +34,15 @@
             android:layout_marginTop="@dimen/view_group_to_parent"
             android:orientation="vertical">
 
-            <!--imageURL="@{blog.blogImageURL}"-->
+
             <com.makeramen.roundedimageview.RoundedImageView
                 android:id="@+id/ivBlogImage"
+                imageURL="@{blog.blogImageURL}"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/image_height"
                 android:onClick="@{()-> handleBlogExecuteFrmEvent.onImageClicked()}"
                 android:scaleType="fitXY"
-                android:src="@drawable/demo_pic"
+                android:src="@drawable/image_demo"
                 app:riv_corner_radius="@dimen/user_card_radius">
 
             </com.makeramen.roundedimageview.RoundedImageView>
@@ -55,8 +56,8 @@
                 app:endIconMode="clear_text">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    style="@style/UserEditTextInformation"
                     android:id="@+id/titBlogTitle"
+                    style="@style/UserEditTextInformation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
@@ -73,10 +74,10 @@
                 app:endIconMode="clear_text">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/titBlogDescription"
                     style="@style/UserEditTextInformation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/titBlogDescription"
                     android:background="@color/white"
                     android:text="@{blog.blogDescription}" />
 
@@ -93,12 +94,12 @@
             android:orientation="horizontal">
 
             <Button
-                android:onClick="@{()-> handleBlogExecuteFrmEvent.deleteCurrentBlog()}"
                 android:id="@+id/btnDelete"
                 style="@style/ExecuteButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:onClick="@{()-> handleBlogExecuteFrmEvent.deleteCurrentBlog()}"
                 android:text="@string/btn_action_delete" />
 
             <Button
@@ -110,12 +111,12 @@
                 android:text="@string/btn_action_edit" />
 
             <Button
-                android:onClick="@{()-> handleBlogExecuteFrmEvent.addNewBlog()}"
                 android:id="@+id/btnAdd"
                 style="@style/ExecuteButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:onClick="@{()-> handleBlogExecuteFrmEvent.addNewBlog()}"
                 android:text="@string/btn_action_add" />
         </LinearLayout>
 

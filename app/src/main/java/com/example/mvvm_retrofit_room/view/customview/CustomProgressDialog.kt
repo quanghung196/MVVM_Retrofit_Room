@@ -2,22 +2,35 @@ package com.example.mvvm_retrofit_room.view.customview
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.Context
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Window
-import android.widget.TextView
+import android.view.WindowManager
+import androidx.databinding.DataBindingUtil
 import com.example.mvvm_retrofit_room.R
-import com.example.mvvm_retrofit_room.view.fragment.BlogExecuteFragment
+import com.example.mvvm_retrofit_room.databinding.CustomProgressDialogBinding
 
-object CustomProgressDialog {
 
-    fun showDialog(message: String, context: Activity) {
-        val dialog = Dialog(context)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(false)
-        dialog.setContentView(R.layout.custom_progress_dialog)
+class CustomProgressDialog(val activity: Activity) : Dialog(activity) {
 
-        val title = dialog.findViewById(R.id.tvTitle) as TextView
-        title.text = message
+    private var mBinding: CustomProgressDialogBinding
+
+    init {
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        setCancelable(false)
+
+        mBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.custom_progress_dialog, null, false)
+        setContentView(mBinding.root)
+
+        val window: Window? = getWindow()
+        window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        window!!.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
     }
 
+    fun setTitle(message: String){
+        mBinding.tvTitle.text = message
+    }
 }

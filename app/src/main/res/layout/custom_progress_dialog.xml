@@ -1,28 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="@dimen/progress_dialog_width"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:layout_marginRight="@dimen/progress_dialog_margin"
-    android:layout_marginLeft="@dimen/progress_dialog_margin"
-    app:cardCornerRadius="@dimen/progress_dialog_radius">
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/bg_dialog_progress"
+        android:layout_gravity="center"
         android:orientation="horizontal"
-        android:padding="@dimen/progress_dialog_padding">
+        android:layout_margin="@dimen/progress_dialog_margin">
 
-        <com.github.ybq.android.spinkit.SpinKitView xmlns:app="http://schemas.android.com/apk/res-auto"
+        <com.github.ybq.android.spinkit.SpinKitView
             android:id="@+id/spin_kit"
+            android:layout_margin="@dimen/progress_dialog_margin"
             style="@style/SpinKitView.Circle"
             android:layout_width="@dimen/progress_dialog_spin"
             android:layout_height="@dimen/progress_dialog_spin"
             app:SpinKit_Color="@color/blueAtoll" />
 
         <TextView
+            android:layout_gravity="center_vertical"
             android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,5 +31,4 @@
             android:textSize="@dimen/progress_dialog_title_size" />
     </LinearLayout>
 
-
-</androidx.cardview.widget.CardView>
+</layout>

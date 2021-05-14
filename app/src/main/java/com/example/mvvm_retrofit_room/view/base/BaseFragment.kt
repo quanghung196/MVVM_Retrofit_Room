@@ -1,5 +1,6 @@
 package com.example.mvvm_retrofit_room.view.base
 
+import android.app.Activity
 import android.os.Bundle
 
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.mvvm_retrofit_room.view.customview.CustomProgressDialog
 import com.example.mvvm_retrofit_room.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
@@ -26,6 +28,7 @@ abstract class BaseFragment<V : ViewDataBinding, VM : ViewModel> : Fragment(), C
     protected lateinit var viewModel: VM
 
     private lateinit var job: Job
+    lateinit var customProgressDialog: CustomProgressDialog
 
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
@@ -46,7 +49,11 @@ abstract class BaseFragment<V : ViewDataBinding, VM : ViewModel> : Fragment(), C
             )
         binding.lifecycleOwner = this
         job = Job()
+
         viewModel = ViewModelProvider(this, ViewModelFactory()).get(getViewModel())
+
+        customProgressDialog = CustomProgressDialog(activity as Activity)
+
         return binding.root
     }
 
@@ -55,12 +62,11 @@ abstract class BaseFragment<V : ViewDataBinding, VM : ViewModel> : Fragment(), C
     }
 
     fun setToolbarTitle(title: String) {
-        (requireActivity() as AppCompatActivity).toolbarbMain.title = title
+        (activity as Activity).toolbarbMain.title = title
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         onViewReady()
     }
 

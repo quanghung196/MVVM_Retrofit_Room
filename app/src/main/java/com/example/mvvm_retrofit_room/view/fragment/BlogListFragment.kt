@@ -1,5 +1,8 @@
 package com.example.mvvm_retrofit_room.view.fragment
 
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import com.example.mvvm_retrofit_room.R
@@ -26,13 +29,14 @@ class BlogListFragment : BaseFragment<FragmentBlogListBinding, BlogListFragmentV
     override fun onViewReady() {
         binding.handleBlogListFrmEvent = this
 
+        setHasOptionsMenu(true)
+        setToolbarTitle("List User")
+
         viewModel.setBlogListener(this)
 
         mBlogAdapter = BlogAdapter(viewModel)
         binding.rvUserList.adapter = mBlogAdapter
         refreshData()
-
-        setToolbarTitle("List User")
 
         binding.swiperLayout.setOnRefreshListener {
             refreshData()
@@ -48,22 +52,30 @@ class BlogListFragment : BaseFragment<FragmentBlogListBinding, BlogListFragmentV
     }
 
     fun addNewBlog() {
-        mBlog = Blog("", "", "any string")
+        mBlog = Blog("", "", "")
         val action =
             BlogListFragmentDirections.actionBlogListFragmentToBlogExecuteFragment(mBlog)
         view?.let { Navigation.findNavController(it).navigate(action) }
     }
 
+    /*
+    * get data từ api
+    * */
     private fun refreshData() {
         viewModel.getAllBlogFromServer().observe(viewLifecycleOwner, Observer {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
                         binding.swiperLayout.isRefreshing = false
-                        resource.data?.let { blog -> mBlogAdapter.submitData(blog) }
+                        resource.data?.let { blog ->
+                            mBlogAdapter.submitData(blog)
+                            viewModel.deteleAllBlogFromDatabase()
+                            viewModel.synchronizeAllBlogFromServer(blog) }
                     }
                     Status.ERROR -> {
+                        //nếu error thì load dự liệu từ database
                         binding.swiperLayout.isRefreshing = false
+                        getDataFromDatabase()
                         showToast("Error loading data")
                     }
                     Status.LOADING -> {
@@ -74,4 +86,12 @@ class BlogListFragment : BaseFragment<FragmentBlogListBinding, BlogListFragmentV
         })
     }
 
+    /*
+    * funtion getData từ room nếu không load được data từ api
+    * */
+    private fun getDataFromDatabase(){
+        viewModel.getAllBlogFromDatabase().observe(viewLifecycleOwner, Observer {
+            mBlogAdapter.submitData(it)
+        })
+    }
 }

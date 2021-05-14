@@ -1,4 +1,4 @@
-package com.example.myapplication.utils
+package com.example.mvvm_retrofit_room.utils
 
 import android.app.Application
 

@@ -51,21 +51,12 @@ class BlogExecuteFragment :
         if (mBlog.blogTitle.length > 0) {
             setToolbarTitle("Edit Blog")
             binding.btnAdd.visibility = View.GONE
-            loadImage(binding.ivBlogImage)
         } else {
             setToolbarTitle("Add Blog")
             binding.btnDelete.visibility = View.GONE
             binding.btnEdit.visibility = View.GONE
             binding.ivBlogImage.setImageResource(R.drawable.image_place_holder)
         }
-    }
-
-    private fun loadImage(imageView: ImageView) {
-        Glide.with(this)
-            .load(mBlog.blogImageURL)
-            .placeholder(R.drawable.image_place_holder)
-            .error(R.drawable.image_error)
-            .into(imageView)
     }
 
     fun backToBlogListFragment() {
@@ -79,19 +70,23 @@ class BlogExecuteFragment :
         getNewBlog()
         mEditTextList.clear()
         if (isTextFullfill(getAllEditText(binding.relativeContainer, mEditTextList))) {
+            mBlog.blogImageURL = "any string"
             viewModel.addNewBlogToServer(mBlog).observe(viewLifecycleOwner, Observer {
                 it?.let { resource ->
                     when (resource.status) {
                         Status.SUCCESS -> {
+                            customProgressDialog.dismiss()
                             showToast("Blog Added")
                             view?.let { activity?.hideKeyboardInFragment(it) }
                             backToBlogListFragment()
                         }
                         Status.ERROR -> {
+                            customProgressDialog.dismiss()
                             it.message?.let { it -> showToast(it) }
                         }
                         Status.LOADING -> {
-
+                            customProgressDialog.setTitle("Adding, please wait...")
+                            customProgressDialog.show()
                         }
                     }
                 }
@@ -107,15 +102,18 @@ class BlogExecuteFragment :
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
+                        customProgressDialog.dismiss()
+                        showToast("Deleted fail")
+                    }
+                    Status.ERROR -> {
+                        customProgressDialog.dismiss()
                         showToast("Blog Deleted")
                         view?.let { activity?.hideKeyboardInFragment(it) }
                         backToBlogListFragment()
                     }
-                    Status.ERROR -> {
-                        it.message?.let { it -> showToast(it) }
-                        Log.e(TAG, it.toString() )
-                    }
                     Status.LOADING -> {
+                        customProgressDialog.setTitle("Deleting, please wait...")
+                        customProgressDialog.show()
                     }
                 }
             }

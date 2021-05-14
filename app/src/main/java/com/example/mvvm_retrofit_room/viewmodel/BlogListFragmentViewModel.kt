@@ -27,6 +27,16 @@ class BlogListFragmentViewModel() : ViewModel() {
         }
     }
 
+    fun synchronizeAllBlogFromServer(blogs: List<Blog>) = viewModelScope.launch {
+        mBlogRepository.synchronizeAllBlogFromServer(blogs)
+    }
+
+    fun deteleAllBlogFromDatabase() = viewModelScope.launch {
+        mBlogRepository.deteleAllBlogFromDatabase()
+    }
+
+    fun getAllBlogFromDatabase(): LiveData<List<Blog>> = mBlogRepository.getAllBlogFromDatabase()
+
     fun setBlogListener(blogListener: BlogListener) {
         this.blogListener = blogListener
     }

@@ -19,7 +19,7 @@ data class Blog(
 
 ) : Serializable {
     @SerializedName("id")
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey()
     @ColumnInfo(name = "blog_id_col")
     var blogID: String = ""
 }

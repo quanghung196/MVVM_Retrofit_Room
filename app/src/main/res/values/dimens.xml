@@ -19,7 +19,8 @@
     <dimen name="progress_dialog_spin">50dp</dimen>
     <dimen name="progress_dialog_padding">16dp</dimen>
     <dimen name="progress_dialog_radius">20dp</dimen>
-    <dimen name="progress_dialog_margin">20dp</dimen>
+    <dimen name="progress_dialog_margin">25dp</dimen>
     <dimen name="progress_dialog_width">300dp</dimen>
     <dimen name="progress_dialog_title_margin">16dp</dimen>
+    <dimen name="inset_progress_dialog">15dp</dimen>
 </resources>

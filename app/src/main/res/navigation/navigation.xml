@@ -14,7 +14,7 @@
             android:id="@+id/action_blogListFragment_to_blogExecuteFragment"
             app:destination="@id/blogExecuteFragment"
             app:enterAnim="@anim/enter_from_right"
-            app:popExitAnim="@anim/exit_to_left" />
+            app:popExitAnim="@anim/exit_to_right" />
     </fragment>
     <fragment
         android:id="@+id/blogExecuteFragment"

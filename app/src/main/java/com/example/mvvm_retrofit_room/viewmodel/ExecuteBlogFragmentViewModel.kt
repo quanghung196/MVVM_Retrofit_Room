@@ -41,7 +41,8 @@ class ExecuteBlogFragmentViewModel : ViewModel() {
     fun deleteCurrentBlog(blogID: String) = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
         try {
-            emit(Resource.success(data = mBlogRepository.deteteBlogOnServer(blogID)))
+            mBlogRepository.deteteBlogOnServer(blogID)
+            emit(Resource.success(data = mBlogRepository.getBlogFromServerByID(blogID)))
         } catch (exception: Exception) {
             emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
         }

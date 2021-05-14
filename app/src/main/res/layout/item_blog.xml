@@ -34,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/item_thumbnail_height"
                 android:scaleType="fitXY"
-                android:src="@drawable/demo_pic" />
+                android:src="@drawable/image_demo" />
 
             <TextView
                 android:id="@+id/tvBlogTitle"
