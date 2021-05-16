@@ -14,6 +14,7 @@ import com.google.android.material.textfield.TextInputEditText
 
 object ReusableFunctionForEdittext {
 
+    //hàm clear text tất cả các edit text có trong 1 view group
     fun clearAllEdittext(group: ViewGroup) {
         var i = 0
         val count = group.childCount
@@ -28,6 +29,7 @@ object ReusableFunctionForEdittext {
         }
     }
 
+    //hàm lấy tất cả các edit text có trong view group
     fun getAllEditText(group: ViewGroup, textList: ArrayList<TextInputEditText>): ArrayList<TextInputEditText> {
         var i = 0
         val count = group.childCount
@@ -44,6 +46,7 @@ object ReusableFunctionForEdittext {
         return textList
     }
 
+    //hàm check các edit text đã có thông tin hay chưa
     fun isTextFullfill(textList: ArrayList<TextInputEditText>): Boolean {
         for (textField: TextInputEditText in textList) {
             if (textField.text.toString().isEmpty()) {
@@ -53,6 +56,7 @@ object ReusableFunctionForEdittext {
         return true
     }
 
+    //hàm ẩn bàn phím
     fun Context.hideKeyboardInFragment(view: View) {
         val inputMethodManager =
             getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager

@@ -6,6 +6,7 @@ import com.bumptech.glide.Glide
 import com.example.mvvm_retrofit_room.R
 import com.makeramen.roundedimageview.RoundedImageView
 
+//binding imageview with glide
 @BindingAdapter("imageURL")
 fun loadImage(view: RoundedImageView, profileImage: String) {
 
