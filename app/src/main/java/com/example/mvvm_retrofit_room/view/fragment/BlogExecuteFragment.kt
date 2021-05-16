@@ -95,7 +95,7 @@ class BlogExecuteFragment :
         } else {
             showToast("Error: Invalid text")
         }
-        clearText()
+        clearAllEdittext(binding.relativeContainer)
     }
 
     //xóa data trên server
@@ -126,10 +126,6 @@ class BlogExecuteFragment :
     private fun getNewBlog() {
         mBlog.blogTitle = binding.titBlogTitle.text.toString()
         mBlog.blogDescription = binding.titBlogDescription.text.toString()
-    }
-
-    private fun clearText() {
-        clearAllEdittext(binding.relativeContainer)
     }
 
     fun onImageClicked() {
