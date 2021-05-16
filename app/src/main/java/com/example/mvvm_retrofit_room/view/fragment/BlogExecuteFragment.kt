@@ -48,6 +48,7 @@ class BlogExecuteFragment :
         binding.handleBlogExecuteFrmEvent = this
 
         mEditTextList = ArrayList()
+
         if (mBlog.blogTitle.length > 0) {
             setToolbarTitle("Edit Blog")
             binding.btnAdd.visibility = View.GONE
