@@ -55,7 +55,6 @@ class BlogExecuteFragment :
             setToolbarTitle("Add Blog")
             binding.btnDelete.visibility = View.GONE
             binding.btnEdit.visibility = View.GONE
-            binding.ivBlogImage.setImageResource(R.drawable.image_place_holder)
         }
     }
 
