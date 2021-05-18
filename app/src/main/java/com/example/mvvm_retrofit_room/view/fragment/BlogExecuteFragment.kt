@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.example.mvvm_retrofit_room.R
 import com.example.mvvm_retrofit_room.databinding.FragmentBlogExecuteBinding
 import com.example.mvvm_retrofit_room.model.Blog
+import com.example.mvvm_retrofit_room.utils.InternetConnection
 import com.example.mvvm_retrofit_room.utils.Status
 import com.example.mvvm_retrofit_room.view.base.BaseFragment
 import com.example.mvvm_retrofit_room.view.customview.CustomProgressDialog
@@ -72,27 +73,32 @@ class BlogExecuteFragment :
         getNewBlog()
         mEditTextList.clear()
         if (isTextFullfill(getAllEditText(binding.relativeContainer, mEditTextList))) {
-            mBlog.blogImageURL = "any string"
-            viewModel.addNewBlogToServer(mBlog).observe(viewLifecycleOwner, Observer {
-                it?.let { resource ->
-                    when (resource.status) {
-                        Status.SUCCESS -> {
-                            customProgressDialog.dismiss()
-                            showToast("Blog Added")
-                            view?.let { activity?.hideKeyboardInFragment(it) }
-                            backToBlogListFragment()
-                        }
-                        Status.ERROR -> {
-                            customProgressDialog.dismiss()
-                            it.message?.let { it -> showToast(it) }
-                        }
-                        Status.LOADING -> {
-                            customProgressDialog.setTitle("Adding, please wait...")
-                            customProgressDialog.show()
+
+                mBlog.blogImageURL = "any string"
+                viewModel.addNewBlogToServer(mBlog).observe(viewLifecycleOwner, Observer {
+                    it?.let { resource ->
+                        when (resource.status) {
+                            Status.SUCCESS -> {
+                                customProgressDialog.dismiss()
+                                showToast("Blog Added")
+                                view?.let { activity?.hideKeyboardInFragment(it) }
+                                backToBlogListFragment()
+                            }
+                            Status.ERROR -> {
+                                if(!InternetConnection.isOnline(requireContext())){
+                                    showToast("Error: No internet connection")
+                                }else{
+                                    it.message?.let { it -> showToast(it) }
+                                }
+                                customProgressDialog.dismiss()
+                            }
+                            Status.LOADING -> {
+                                customProgressDialog.setTitle("Adding, please wait...")
+                                customProgressDialog.show()
+                            }
                         }
                     }
-                }
-            })
+                })
         } else {
             showToast("Error: Invalid text")
         }
@@ -101,26 +107,34 @@ class BlogExecuteFragment :
 
     //xóa data trên server
     fun deleteCurrentBlog() {
-        viewModel.deleteCurrentBlog(mBlog.blogID).observe(viewLifecycleOwner, Observer {
-            it?.let { resource ->
-                when (resource.status) {
-                    Status.SUCCESS -> {
-                        customProgressDialog.dismiss()
-                        showToast("Deleted fail")
-                    }
-                    Status.ERROR -> {
-                        customProgressDialog.dismiss()
-                        showToast("Blog Deleted")
-                        view?.let { activity?.hideKeyboardInFragment(it) }
-                        backToBlogListFragment()
-                    }
-                    Status.LOADING -> {
-                        customProgressDialog.setTitle("Deleting, please wait...")
-                        customProgressDialog.show()
+        if(InternetConnection.isOnline(requireContext())){
+            viewModel.deleteCurrentBlog(mBlog.blogID).observe(viewLifecycleOwner, Observer {
+                it?.let { resource ->
+                    when (resource.status) {
+                        Status.SUCCESS -> {
+                            customProgressDialog.dismiss()
+                            showToast("Deleted fail")
+                        }
+                        Status.ERROR -> {
+                            if(!InternetConnection.isOnline(requireContext())){
+                                showToast("Error: No internet connection")
+                            }else{
+                                customProgressDialog.dismiss()
+                                showToast("Blog Deleted")
+                                view?.let { activity?.hideKeyboardInFragment(it) }
+                                backToBlogListFragment()
+                            }
+                        }
+                        Status.LOADING -> {
+                            customProgressDialog.setTitle("Deleting, please wait...")
+                            customProgressDialog.show()
+                        }
                     }
                 }
-            }
-        })
+            })
+        }else{
+            showToast("Error: No internet connection")
+        }
     }
 
     //get text từ edittext

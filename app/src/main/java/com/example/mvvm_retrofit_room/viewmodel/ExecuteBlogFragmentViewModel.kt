@@ -1,12 +1,16 @@
 package com.example.mvvm_retrofit_room.viewmodel
 
+import android.app.Application
 import android.content.ContentValues
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.mvvm_retrofit_room.data.repository.BlogRepository
 import com.example.mvvm_retrofit_room.model.Blog
+import com.example.mvvm_retrofit_room.utils.InternetConnection
+import com.example.mvvm_retrofit_room.utils.MyApp
 import com.example.mvvm_retrofit_room.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,6 +19,7 @@ import java.lang.Exception
 class ExecuteBlogFragmentViewModel : ViewModel() {
 
     private val mBlogRepository: BlogRepository = BlogRepository()
+    private val mContext: Context = MyApp.getInstance()
 
     //add data lên server
     fun addNewBlogToServer(blog: Blog) = liveData(Dispatchers.IO) {

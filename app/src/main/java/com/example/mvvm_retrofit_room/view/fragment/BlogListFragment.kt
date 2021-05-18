@@ -8,6 +8,7 @@ import androidx.navigation.Navigation
 import com.example.mvvm_retrofit_room.R
 import com.example.mvvm_retrofit_room.databinding.FragmentBlogListBinding
 import com.example.mvvm_retrofit_room.model.Blog
+import com.example.mvvm_retrofit_room.utils.InternetConnection
 import com.example.mvvm_retrofit_room.utils.Status
 import com.example.mvvm_retrofit_room.view.adapter.BlogAdapter
 import com.example.mvvm_retrofit_room.view.base.BaseFragment
@@ -72,9 +73,13 @@ class BlogListFragment : BaseFragment<FragmentBlogListBinding, BlogListFragmentV
                     }
                     Status.ERROR -> {
                         //nếu error thì load dự liệu từ database
+                        if(!InternetConnection.isOnline(requireContext())){
+                            showToast("Error: No internet connection")
+                        }else{
+                            showToast("Error loading data")
+                        }
                         binding.swiperLayout.isRefreshing = false
                         getDataFromDatabase()
-                        showToast("Error loading data")
                     }
                     Status.LOADING -> {
                         binding.swiperLayout.isRefreshing = true

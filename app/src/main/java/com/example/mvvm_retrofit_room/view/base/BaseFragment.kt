@@ -1,6 +1,7 @@
 package com.example.mvvm_retrofit_room.view.base
 
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 
 import android.view.LayoutInflater
@@ -28,7 +29,7 @@ abstract class BaseFragment<V : ViewDataBinding, VM : ViewModel> : Fragment(), C
     protected lateinit var viewModel: VM
 
     private lateinit var job: Job
-    lateinit var customProgressDialog: CustomProgressDialog
+    protected lateinit var customProgressDialog: CustomProgressDialog
 
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
