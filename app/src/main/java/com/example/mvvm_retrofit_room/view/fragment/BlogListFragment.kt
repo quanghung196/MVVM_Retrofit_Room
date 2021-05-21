@@ -31,7 +31,7 @@ class BlogListFragment : BaseFragment<FragmentBlogListBinding, BlogListFragmentV
         binding.handleBlogListFrmEvent = this
 
         setHasOptionsMenu(true)
-        setToolbarTitle("List User")
+        setToolbarTitle("List Blog")
 
         viewModel.setBlogListener(this)
 
@@ -53,7 +53,11 @@ class BlogListFragment : BaseFragment<FragmentBlogListBinding, BlogListFragmentV
 
     //chuyển sang fragment add
     fun addNewBlog() {
-        mBlog = Blog("", "", "")
+        mBlog = Blog(
+            blogTitle = "",
+            blogDescription = "",
+            blogImageURL = ""
+        )
         val action =
             BlogListFragmentDirections.actionBlogListFragmentToBlogExecuteFragment(mBlog)
         view?.let { Navigation.findNavController(it).navigate(action) }
@@ -69,13 +73,14 @@ class BlogListFragment : BaseFragment<FragmentBlogListBinding, BlogListFragmentV
                         resource.data?.let { blog ->
                             mBlogAdapter.submitData(blog)
                             viewModel.deteleAllBlogFromDatabase()
-                            viewModel.synchronizeAllBlogFromServer(blog) }
+                            viewModel.synchronizeAllBlogFromServer(blog)
+                        }
                     }
                     Status.ERROR -> {
                         //nếu error thì load dự liệu từ database
-                        if(!InternetConnection.isOnline(requireContext())){
+                        if (!InternetConnection.isOnline(requireContext())) {
                             showToast("Error: No internet connection")
-                        }else{
+                        } else {
                             showToast("Error loading data")
                         }
                         binding.swiperLayout.isRefreshing = false
@@ -90,7 +95,7 @@ class BlogListFragment : BaseFragment<FragmentBlogListBinding, BlogListFragmentV
     }
 
     //lấy data từ room
-    private fun getDataFromDatabase(){
+    private fun getDataFromDatabase() {
         viewModel.getAllBlogFromDatabase().observe(viewLifecycleOwner, Observer {
             mBlogAdapter.submitData(it)
         })

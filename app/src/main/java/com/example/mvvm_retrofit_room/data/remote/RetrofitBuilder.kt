@@ -11,14 +11,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitBuilder {
 
     private const val BASE_URL = "https://ue3n9ksue9.execute-api.ap-southeast-1.amazonaws.com/"
-    private const val X_API_KEY = "VRDN7w5XbI7vwlp0cnVYi8xUU6WV3Sma1d9ijGkJ"
+    const val HEADER_X_API_KEY = "VRDN7w5XbI7vwlp0cnVYi8xUU6WV3Sma1d9ijGkJ"
 
     private fun provideClient() : OkHttpClient{
             val headerInterceptor = Interceptor {
                 val original: Request = it.request()
 
                 val request: Request = original.newBuilder()
-                    .header("x-api-key", X_API_KEY)
+                    .header("x-api-key", HEADER_X_API_KEY)
                     .build()
 
                 it.proceed(request)

@@ -9,7 +9,6 @@ import com.makeramen.roundedimageview.RoundedImageView
 //binding imageview with glide
 @BindingAdapter("imageURL")
 fun loadImage(view: RoundedImageView, profileImage: String) {
-
     Glide.with(view.context)
         .load(profileImage)
         .placeholder(R.drawable.image_place_holder)

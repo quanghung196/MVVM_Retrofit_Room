@@ -19,6 +19,7 @@ class BlogRepository {
     suspend fun addBlogToServer(blog: Blog) = RetrofitBuilder.apiService.addBlog(blog)
     suspend fun deteteBlogOnServer(blogID: String) = RetrofitBuilder.apiService.deleteBlog(blogID = blogID)
     suspend fun getBlogFromServerByID(blogID: String) = RetrofitBuilder.apiService.getBlogByID(blogID = blogID)
+    suspend fun getBlogUploadableURL() = RetrofitBuilder.apiService.getBlogUploadableURL()
 
     //local data
     suspend fun synchronizeAllBlogFromServer(blogs: List<Blog>) = blogDAO.synchronizeAllBlogFromServer(blogs)

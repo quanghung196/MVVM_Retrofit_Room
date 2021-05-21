@@ -21,7 +21,7 @@ import com.example.mvvm_retrofit_room.view.customview.CustomProgressDialog
 class MainActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityMainBinding
     private lateinit var mNavController: NavController
-    private lateinit var mBroadcastReceiver: BroadcastReceiver
+    //private lateinit var mBroadcastReceiver: BroadcastReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,11 +31,11 @@ class MainActivity : AppCompatActivity() {
         //setSupportActionBar(binding.toolbarbMain)
         mBinding.toolbarbMain.setupWithNavController(mNavController)
 
-        mBroadcastReceiver = NetworkReceiver()
-        registerBroadcast()
+        /*mBroadcastReceiver = NetworkReceiver()
+        registerBroadcast()*/
     }
 
-    private fun registerBroadcast(){
+    /*private fun registerBroadcast(){
         registerReceiver(mBroadcastReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
     }
 
@@ -46,5 +46,5 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         unregisterBroadcast()
-    }
+    }*/
 }

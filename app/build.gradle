@@ -87,4 +87,7 @@ dependencies {
     //spinkit
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 
+    //dexter
+    implementation 'com.karumi:dexter:6.2.2'
+
 }
