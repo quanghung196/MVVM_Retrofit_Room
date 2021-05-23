@@ -1,6 +1,5 @@
 package com.example.mvvm_retrofit_room.viewmodel
 
-import android.content.ContentValues
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -18,7 +17,6 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.IOException
-import java.net.URI.create
 
 
 class ExecuteBlogFragmentViewModel : ViewModel() {
@@ -27,7 +25,7 @@ class ExecuteBlogFragmentViewModel : ViewModel() {
     private val mContext: Context = MyApp.getInstance()
 
     private val _isImageUploaded = MutableLiveData<Boolean>()
-    val isImageUploaded : LiveData<Boolean>
+    val isImageUploaded: LiveData<Boolean>
         get() = _isImageUploaded
 
     init {
@@ -65,39 +63,42 @@ class ExecuteBlogFragmentViewModel : ViewModel() {
         }
     }
 
-    fun uploadBlogImageToServer(uploadURL: String, imageUri: String) {
-        val client = OkHttpClient()
-        val file = File(imageUri)
-        val MEDIA_TYPE_JPEG: MediaType? = "image/*".toMediaTypeOrNull()
-        val requestBody: RequestBody = MultipartBody.Builder()
-            .setType(MultipartBody.FORM)
-            .addFormDataPart("data", imageUri, file.asRequestBody(MEDIA_TYPE_JPEG))
-            .build()
-        var request: Request = Request.Builder()
-            .url(uploadURL)
-            .header("x-api-key", RetrofitBuilder.HEADER_X_API_KEY)
-            .post(requestBody).build()
+    fun uploadBlogImageToServer() {
+        val uploadURL = "https://profile-bucket-dev.s3.ap-southeast-1.amazonaws.com/test?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210523T195802Z&X-Amz-SignedHeaders=host&X-Amz-Expires=59&X-Amz-Credential=AKIAWE3SQ5MCXDKBGU5M%2F20210523%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-Signature=a0bd97f1d022dc2873965361eff1e99278606b80596a644d002b8f23a240507a"
+        val imageUri = "/storage/emulated/0/Download/img_9.jpg"
         try {
-            var response: Response = client.newCall(request).execute()
-            if (!response.isSuccessful) {
-                Log.d("lalaa", response.toString())
-                _isImageUploaded.postValue(false)
-            } else {
-                _isImageUploaded.postValue(true)
-                Log.e("error", "error")
-                /*var respBody : String? = response.body()?.string()
-                var jsonObj : JSONObject = JSONObject(respBody)
-                var url : String = jsonObj.getString("url")
-                var id: String = jsonObj.getString("id")*/
-            }
-        } catch (e: IOException) {
-            e.message?.let { Log.e("error", it) }
-            _isImageUploaded.postValue(false)
-        }
-    }
+            val client = OkHttpClient()
+            val file = File(imageUri)
 
-    override fun onCleared() {
-        super.onCleared()
-        Log.i(ContentValues.TAG, "onCleared: ")
+            val MEDIA_TYPE_IMAGE: MediaType? = "image/*".toMediaTypeOrNull()
+
+            val requestBody: RequestBody = MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("file", file.name)
+                .build()
+
+            var request: Request = Request.Builder()
+                .url(uploadURL)
+                .header("x-api-key", RetrofitBuilder.HEADER_X_API_KEY)
+                .post(requestBody)
+                .build()
+
+             client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    Log.e("lala", e.message.toString())
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    if (response.isSuccessful) {
+                        Log.e("lala", response.body.toString())
+                    } else {
+                        Log.e("lala", response.message)
+                    }
+                }
+            })
+
+        } catch (e: IOException) {
+            Log.e("lalaa", e.message.toString())
+        }
     }
 }

@@ -10,9 +10,11 @@ import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.example.mvvm_retrofit_room.R
+import com.example.mvvm_retrofit_room.data.remote.RetrofitBuilder
 import com.example.mvvm_retrofit_room.databinding.FragmentBlogExecuteBinding
 import com.example.mvvm_retrofit_room.model.Blog
 import com.example.mvvm_retrofit_room.utils.Constants.GALLERY_REQUEST_CODE
+import com.example.mvvm_retrofit_room.utils.ImagePath
 import com.example.mvvm_retrofit_room.utils.InternetConnection
 import com.example.mvvm_retrofit_room.utils.Status
 import com.example.mvvm_retrofit_room.utils.loadImage
@@ -27,7 +29,9 @@ import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
+import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
+
 
 
 class BlogExecuteFragment :
@@ -38,6 +42,7 @@ class BlogExecuteFragment :
     private lateinit var mEditTextList: ArrayList<TextInputEditText>
     private var mUploadableURL: String? = null
     private var mBlogImageURI: Uri? = null
+    private lateinit var filePath: String
 
     override fun getLayoutId(): Int = R.layout.fragment_blog_execute
 
@@ -74,83 +79,38 @@ class BlogExecuteFragment :
 
     //add data lên server
     fun addNewBlog() {
-        getUploadableURL()
-        mEditTextList.clear()
-        clearAllEdittext(binding.relativeContainer)
-    }
-
-    private fun addBlogData(){
-        getNewBlog()
-        viewModel.addNewBlogToServer(mBlog).observe(viewLifecycleOwner, Observer {
-            it?.let { resource ->
-                when (resource.status) {
-                    Status.SUCCESS -> {
-                        customProgressDialog.dismiss()
-                        showToast("Blog Added")
-                        view?.let { activity?.hideKeyboardInFragment(it) }
-                        backToBlogListFragment()
-                    }
-                    Status.ERROR -> {
-                        if (!InternetConnection.isOnline(requireContext())) {
-                            showToast("Error: No internet connection")
-                        } else {
-                            it.message?.let { it -> showToast(it) }
-                        }
-                        customProgressDialog.dismiss()
-                    }
-                    Status.LOADING -> {
-                        customProgressDialog.setTitle("Adding, please wait...")
-                        customProgressDialog.show()
-                    }
-                }
-            }
-        })
-    }
-
-    private fun getUploadableURL() {
-        if (isTextFullfill(getAllEditText(binding.relativeContainer, mEditTextList))) {
-            viewModel.getBlogUploadableURL().observe(viewLifecycleOwner, Observer {
+        /*if (isTextFullfill(getAllEditText(binding.relativeContainer, mEditTextList))) {
+            getNewBlog()
+            viewModel.addNewBlogToServer(mBlog).observe(viewLifecycleOwner, Observer {
                 it?.let { resource ->
                     when (resource.status) {
                         Status.SUCCESS -> {
                             customProgressDialog.dismiss()
-                            resource.data?.let {
-                                mBlog.blogImageURL = it.blogImageUploadURL
-                                uploadBlogImageToServer(
-                                    it.blogImageUploadURL,
-                                    mBlogImageURI.toString()
-                                )
-                            }
+                            showToast("Blog Added")
+                            backToBlogListFragment()
                         }
                         Status.ERROR -> {
                             if (!InternetConnection.isOnline(requireContext())) {
                                 showToast("Error: No internet connection")
                             } else {
-
+                                it.message?.let { it -> showToast(it) }
                             }
                             customProgressDialog.dismiss()
                         }
                         Status.LOADING -> {
-                            customProgressDialog.setTitle("Getting, please wait...")
+                            customProgressDialog.setTitle("Adding, please wait...")
                             customProgressDialog.show()
                         }
                     }
                 }
-
             })
-        }else {
+        } else {
             showToast("Error: Invalid text")
         }
-    }
-
-    private fun uploadBlogImageToServer(uploadURL: String, imageUri: String) {
-        viewModel.uploadBlogImageToServer(uploadURL, imageUri)
-        viewModel.isImageUploaded.observe(viewLifecycleOwner, Observer {
-            if (it) {
-                showToast("aaaaaaaaaaaaaaa")
-                addBlogData()
-            }
-        })
+        mEditTextList.clear()
+        clearAllEdittext(binding.relativeContainer)
+        view?.let { activity?.hideKeyboardInFragment(it) }*/
+        viewModel.uploadBlogImageToServer()
     }
 
     //xóa data trên server
@@ -185,6 +145,7 @@ class BlogExecuteFragment :
     private fun getNewBlog() {
         mBlog.blogTitle = binding.titBlogTitle.text.toString()
         mBlog.blogDescription = binding.titBlogDescription.text.toString()
+        mBlog.blogImageURL = "any string"
     }
 
     fun onImageClicked() {
@@ -202,12 +163,11 @@ class BlogExecuteFragment :
             .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
             .withListener(object : PermissionListener {
                 override fun onPermissionGranted(response: PermissionGrantedResponse) {
-                    //showToast("Permission granted")
                     openGalleryForImage()
                 }
 
                 override fun onPermissionRationaleShouldBeShown(
-                    permission: com.karumi.dexter.listener.PermissionRequest?,
+                    permission: PermissionRequest?,
                     token: PermissionToken?
                 ) {
                     if (token != null) {
@@ -225,7 +185,10 @@ class BlogExecuteFragment :
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            mBlogImageURI = data.data
+
+            /*filePath = ImagePath.getPathFromUri(requireContext(), data.data!!).toString()
+            Log.e("lalaa", filePath)*/
+
             loadImage(binding.ivBlogImage, data.data.toString())
         }
     }

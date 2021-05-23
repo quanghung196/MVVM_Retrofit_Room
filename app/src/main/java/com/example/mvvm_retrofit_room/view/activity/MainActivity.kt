@@ -1,22 +1,14 @@
 package com.example.mvvm_retrofit_room.view.activity
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.IntentFilter
-import android.net.ConnectivityManager
-import android.net.Network
-import android.os.Build
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.setupWithNavController
 import com.example.mvvm_retrofit_room.R
-import com.example.mvvm_retrofit_room.broadcast_receiver.NetworkReceiver
 import com.example.mvvm_retrofit_room.databinding.ActivityMainBinding
-import com.example.mvvm_retrofit_room.view.customview.CustomProgressDialog
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityMainBinding

@@ -57,6 +57,5 @@ class BlogListFragmentViewModel() : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        Log.i(TAG, "onCleared: ")
     }
 }

@@ -42,7 +42,6 @@ object ReusableFunctionForEdittext {
             }
             i++
         }
-        Log.i("lala", textList.size.toString())
         return textList
     }
 

@@ -43,11 +43,7 @@ abstract class BaseFragment<V : ViewDataBinding, VM : ViewModel> : Fragment(), C
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding =
-            DataBindingUtil.inflate(
-                inflater,
-                getLayoutId(), container, false
-            )
+        binding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false)
         binding.lifecycleOwner = this
         job = Job()
 
@@ -59,7 +55,7 @@ abstract class BaseFragment<V : ViewDataBinding, VM : ViewModel> : Fragment(), C
     }
 
     fun showToast(message: String) {
-        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 
     fun setToolbarTitle(title: String) {
