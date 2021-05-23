@@ -6,7 +6,7 @@ import retrofit2.http.*
 
 interface ApiService {
 
-    //@Headers("x-api-key: " + RetrofitBuilder.X_API_KEY)
+    //@Headers("x-api-key: " + RetrofitBuilder.HEADER_X_API_KEY)
     @GET("/dev/profiles")
     suspend fun getAllBlog(): List<Blog>
 
