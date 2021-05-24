@@ -4,7 +4,7 @@ import com.example.mvvm_retrofit_room.model.Blog
 import com.example.mvvm_retrofit_room.model.BlogImageUploadURL
 import retrofit2.http.*
 
-interface ApiService {
+interface BlogApiService {
 
     //@Headers("x-api-key: " + RetrofitBuilder.HEADER_X_API_KEY)
     @GET("/dev/profiles")
@@ -14,7 +14,7 @@ interface ApiService {
     suspend fun getBlogByID(@Path("id") blogID: String): Blog
 
     @GET("/dev/profiles/upload-url")
-    suspend fun getBlogUploadableURL(@Query("name") name : String = "test"): BlogImageUploadURL
+    suspend fun getBlogUploadableURL(@Query("name") fileName : String): BlogImageUploadURL
 
     @POST("/dev/profiles")
     suspend fun addBlog(@Body blog: Blog): Blog

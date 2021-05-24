@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.example.mvvm_retrofit_room.R
-import com.example.mvvm_retrofit_room.data.remote.RetrofitBuilder
 import com.example.mvvm_retrofit_room.databinding.FragmentBlogExecuteBinding
 import com.example.mvvm_retrofit_room.model.Blog
 import com.example.mvvm_retrofit_room.utils.Constants.GALLERY_REQUEST_CODE
@@ -20,10 +19,7 @@ import com.example.mvvm_retrofit_room.utils.Status
 import com.example.mvvm_retrofit_room.utils.loadImage
 import com.example.mvvm_retrofit_room.view.base.BaseFragment
 import com.example.mvvm_retrofit_room.viewmodel.ExecuteBlogFragmentViewModel
-import com.example.myapplication.utils.ReusableFunctionForEdittext.clearAllEdittext
-import com.example.myapplication.utils.ReusableFunctionForEdittext.getAllEditText
 import com.example.myapplication.utils.ReusableFunctionForEdittext.hideKeyboardInFragment
-import com.example.myapplication.utils.ReusableFunctionForEdittext.isTextFullfill
 import com.google.android.material.textfield.TextInputEditText
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
@@ -31,7 +27,8 @@ import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
-
+import okhttp3.MultipartBody
+import java.io.File
 
 
 class BlogExecuteFragment :
@@ -40,9 +37,10 @@ class BlogExecuteFragment :
     private val mArgs: BlogExecuteFragmentArgs by navArgs();
     private lateinit var mBlog: Blog
     private lateinit var mEditTextList: ArrayList<TextInputEditText>
-    private var mUploadableURL: String? = null
+
+    private var mUploadURL: String? = null
     private var mBlogImageURI: Uri? = null
-    private lateinit var filePath: String
+    private lateinit var mImageFile: File
 
     override fun getLayoutId(): Int = R.layout.fragment_blog_execute
 
@@ -79,6 +77,31 @@ class BlogExecuteFragment :
 
     //add data lên server
     fun addNewBlog() {
+        viewModel.getBlogUploadableURL(mImageFile.name).observe(viewLifecycleOwner, Observer {
+            it?.let { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        customProgressDialog.dismiss()
+                        resource.data?.let {
+                            mUploadURL = it.blogImageUploadURL.split("amazonaws.com/")[1]
+                            putImageToServer(uploadURL = it.blogImageUploadURL,)
+                            Log.e("uploadURL ", mUploadURL.toString())
+                        }
+                    }
+                    Status.ERROR -> {
+                        if (!InternetConnection.isOnline(requireContext())) {
+                            showToast("Error: No internet connection")
+                        }
+                        customProgressDialog.dismiss()
+                    }
+                    Status.LOADING -> {
+                        customProgressDialog.setTitle("Adding, please wait...")
+                        customProgressDialog.show()
+                    }
+                }
+            }
+        })
+
         /*if (isTextFullfill(getAllEditText(binding.relativeContainer, mEditTextList))) {
             getNewBlog()
             viewModel.addNewBlogToServer(mBlog).observe(viewLifecycleOwner, Observer {
@@ -110,7 +133,22 @@ class BlogExecuteFragment :
         mEditTextList.clear()
         clearAllEdittext(binding.relativeContainer)
         view?.let { activity?.hideKeyboardInFragment(it) }*/
-        viewModel.uploadBlogImageToServer()
+    }
+
+    fun putImageToServer(uploadURL: String) {
+        viewModel.uploadBlogImageToServer(uploadURL = uploadURL, imageFile = mImageFile)
+        viewModel.isImageUploaded.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                Log.e("uploaded", "success")
+                Log.e("url =: ", uploadURL)
+                val imageURL = uploadURL.split("?X-Amz-Algorithm")[0]
+                mBlog.blogImageURL = imageURL
+                loadImage(binding.ivBlogImage, imageURL)
+            } else {
+                Log.e("uploaded", "fail")
+            }
+            customProgressDialog.dismiss()
+        })
     }
 
     //xóa data trên server
@@ -153,7 +191,7 @@ class BlogExecuteFragment :
     }
 
     private fun openGalleryForImage() {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
         startActivityForResult(intent, GALLERY_REQUEST_CODE)
     }
@@ -184,12 +222,16 @@ class BlogExecuteFragment :
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+        if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK) {
 
-            /*filePath = ImagePath.getPathFromUri(requireContext(), data.data!!).toString()
-            Log.e("lalaa", filePath)*/
+            data?.data.let {
+                mBlogImageURI = it
+                mImageFile = File(ImagePath.getPathFromUri(requireContext(), it!!))
 
-            loadImage(binding.ivBlogImage, data.data.toString())
+                //loadImage(binding.ivBlogImage, mImageFile.toString())
+            }
         }
     }
+
+
 }

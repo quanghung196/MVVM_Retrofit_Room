@@ -1,21 +1,12 @@
 package com.example.mvvm_retrofit_room.viewmodel
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.lifecycle.*
-import com.example.mvvm_retrofit_room.data.remote.ApiService
-import com.example.mvvm_retrofit_room.data.remote.RetrofitBuilder.HEADER_X_API_KEY
 import com.example.mvvm_retrofit_room.data.repository.BlogRepository
 import com.example.mvvm_retrofit_room.model.Blog
 import com.example.mvvm_retrofit_room.utils.Resource
 import com.example.mvvm_retrofit_room.view.listener.BlogListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.asRequestBody
-import java.io.File
-import java.io.IOException
 import java.lang.Exception
 
 
@@ -53,9 +44,5 @@ class BlogListFragmentViewModel() : ViewModel() {
 
     fun onUserClicked(blog: Blog) {
         blogListener.onBlogClicked(blog)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
     }
 }

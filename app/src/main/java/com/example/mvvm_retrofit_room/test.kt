@@ -1,18 +1,12 @@
 package com.example.mvvm_retrofit_room
 
-import android.util.Log
-import com.example.mvvm_retrofit_room.data.remote.RetrofitBuilder
-import kotlinx.coroutines.Dispatchers.Main
+import com.example.mvvm_retrofit_room.data.remote.BlogApiRetrofitBuilder
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.IOException
-import kotlin.concurrent.thread
 
 fun main() {
     val url =
@@ -35,7 +29,7 @@ fun uploadBlogImageToServer(uploadURL: String, imageUri: String) {
 
             var request: Request = Request.Builder()
                 .url(uploadURL)
-                .header("x-api-key", RetrofitBuilder.HEADER_X_API_KEY)
+                .header("x-api-key", BlogApiRetrofitBuilder.HEADER_X_API_KEY)
                 .post(requestBody).build()
             var response: Response = client.newCall(request).execute()
             if (response.isSuccessful) {

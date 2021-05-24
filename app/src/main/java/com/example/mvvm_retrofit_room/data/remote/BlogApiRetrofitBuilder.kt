@@ -8,7 +8,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-object RetrofitBuilder {
+object BlogApiRetrofitBuilder {
 
     private const val BASE_URL = "https://ue3n9ksue9.execute-api.ap-southeast-1.amazonaws.com/"
     const val HEADER_X_API_KEY = "VRDN7w5XbI7vwlp0cnVYi8xUU6WV3Sma1d9ijGkJ"
@@ -37,5 +37,5 @@ object RetrofitBuilder {
         .addConverterFactory(GsonConverterFactory.create())
 
     val retrofit = builder.build()
-    val apiService: ApiService = retrofit.create(ApiService::class.java)
+    val BLOG_API_SERVICE: BlogApiService = retrofit.create(BlogApiService::class.java)
 }
