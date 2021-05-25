@@ -1,15 +1,12 @@
 package com.example.mvvm_retrofit_room.view.fragment
 
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
+import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import com.example.mvvm_retrofit_room.R
 import com.example.mvvm_retrofit_room.databinding.FragmentBlogListBinding
 import com.example.mvvm_retrofit_room.model.Blog
 import com.example.mvvm_retrofit_room.utils.InternetConnection
-import com.example.mvvm_retrofit_room.utils.Status
 import com.example.mvvm_retrofit_room.view.adapter.BlogAdapter
 import com.example.mvvm_retrofit_room.view.base.BaseFragment
 import com.example.mvvm_retrofit_room.view.listener.BlogListener
@@ -20,7 +17,7 @@ class BlogListFragment : BaseFragment<FragmentBlogListBinding, BlogListFragmentV
     BlogListener {
 
     private lateinit var mBlogAdapter: BlogAdapter
-    private lateinit var mBlog: Blog
+    private var mBlog = Blog()
 
     override fun getLayoutId(): Int = R.layout.fragment_blog_list
 
@@ -37,67 +34,52 @@ class BlogListFragment : BaseFragment<FragmentBlogListBinding, BlogListFragmentV
 
         mBlogAdapter = BlogAdapter(viewModel)
         binding.rvUserList.adapter = mBlogAdapter
-        refreshData()
 
+        refreshData()
         binding.swiperLayout.setOnRefreshListener {
             refreshData()
         }
+
+        dataListener()
     }
 
     //chuyển sang fragment edit/delete
     override fun onBlogClicked(blog: Blog) {
+        goToExecuteFragment(blog = blog)
+    }
+
+    //chuyển sang fragment add
+    fun addNewBlog() {
+        goToExecuteFragment(blog = mBlog)
+    }
+
+    private fun goToExecuteFragment(blog: Blog){
         val action =
             BlogListFragmentDirections.actionBlogListFragmentToBlogExecuteFragment(blog)
         view?.let { Navigation.findNavController(it).navigate(action) }
     }
 
-    //chuyển sang fragment add
-    fun addNewBlog() {
-        mBlog = Blog(
-            blogTitle = "",
-            blogDescription = "",
-            blogImageURL = ""
-        )
-        val action =
-            BlogListFragmentDirections.actionBlogListFragmentToBlogExecuteFragment(mBlog)
-        view?.let { Navigation.findNavController(it).navigate(action) }
+    private fun dataLoadingStateListner() {
+        viewModel.loadingState.observe(viewLifecycleOwner, Observer {
+            binding.swiperLayout.isRefreshing = it.isDataLoading
+        })
     }
 
-    //lấy data trên server
-    private fun refreshData() {
-        viewModel.getAllBlogFromServer().observe(viewLifecycleOwner, Observer {
-            it?.let { resource ->
-                when (resource.status) {
-                    Status.SUCCESS -> {
-                        binding.swiperLayout.isRefreshing = false
-                        resource.data?.let { blog ->
-                            mBlogAdapter.submitData(blog)
-                            viewModel.deteleAllBlogFromDatabase()
-                            viewModel.synchronizeAllBlogFromServer(blog)
-                        }
-                    }
-                    Status.ERROR -> {
-                        //nếu error thì load dự liệu từ database
-                        if (!InternetConnection.isOnline(requireContext())) {
-                            showToast("Error: No internet connection")
-                        } else {
-                            showToast("Error loading data")
-                        }
-                        binding.swiperLayout.isRefreshing = false
-                        getDataFromDatabase()
-                    }
-                    Status.LOADING -> {
-                        binding.swiperLayout.isRefreshing = true
-                    }
-                }
+    private fun dataListener(){
+        viewModel.blogs.observe(viewLifecycleOwner, Observer {
+            Log.e("error","data change")
+            Log.e("error","list size " + it.size.toString())
+            mBlogAdapter.submitData(it)
+            if(InternetConnection.isOnline(requireContext())){
+                viewModel.deteleAllBlogFromDatabase()
+                viewModel.synchronizeAllBlogFromServer(it)
             }
         })
     }
 
-    //lấy data từ room
-    private fun getDataFromDatabase() {
-        viewModel.getAllBlogFromDatabase().observe(viewLifecycleOwner, Observer {
-            mBlogAdapter.submitData(it)
-        })
+    //lấy data trên server
+    private fun refreshData() {
+        dataLoadingStateListner()
+        viewModel.getAllBlogFromServer()
     }
 }

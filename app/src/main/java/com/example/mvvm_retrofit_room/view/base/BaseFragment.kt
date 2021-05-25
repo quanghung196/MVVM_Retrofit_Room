@@ -47,7 +47,7 @@ abstract class BaseFragment<V : ViewDataBinding, VM : ViewModel> : Fragment(), C
         binding.lifecycleOwner = this
         job = Job()
 
-        viewModel = ViewModelProvider(this, ViewModelFactory()).get(getViewModel())
+        viewModel = ViewModelProvider(this, ViewModelFactory(requireContext())).get(getViewModel())
 
         customProgressDialog = CustomProgressDialog(activity as Activity)
 

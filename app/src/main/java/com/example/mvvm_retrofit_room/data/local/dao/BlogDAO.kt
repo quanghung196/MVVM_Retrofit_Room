@@ -5,16 +5,19 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import com.example.mvvm_retrofit_room.model.Blog
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Flowable
+
 
 @Dao
 interface BlogDAO {
 
     @Query("select * from blog_table")
-    fun getAllBlogFromDatabase(): LiveData<List<Blog>>
+    fun getAllBlogFromDatabase(): Flowable<List<Blog>>
 
     @Insert
-    suspend fun synchronizeAllBlogFromServer(blogs: List<Blog>)
+    fun synchronizeAllBlogFromServer(blogs: List<Blog>): Completable
 
     @Query("delete from blog_table")
-    suspend fun deteleAllBlogFromDatabase()
+    fun deteleAllBlogFromDatabase(): Completable
 }

@@ -1,5 +1,6 @@
 package com.example.mvvm_retrofit_room.data.remote
 
+import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -33,6 +34,7 @@ object BlogApiRetrofitBuilder {
 
     private val builder = Retrofit.Builder()
         .baseUrl(BASE_URL)
+        .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
         .client(provideClient())
         .addConverterFactory(GsonConverterFactory.create())
 

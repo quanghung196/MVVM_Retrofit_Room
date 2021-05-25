@@ -3,7 +3,6 @@ package com.example.mvvm_retrofit_room.view.fragment
 import android.Manifest
 import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.net.Uri
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
@@ -14,12 +13,13 @@ import com.example.mvvm_retrofit_room.databinding.FragmentBlogExecuteBinding
 import com.example.mvvm_retrofit_room.model.Blog
 import com.example.mvvm_retrofit_room.utils.Constants.GALLERY_REQUEST_CODE
 import com.example.mvvm_retrofit_room.utils.ImagePath
-import com.example.mvvm_retrofit_room.utils.InternetConnection
-import com.example.mvvm_retrofit_room.utils.Status
 import com.example.mvvm_retrofit_room.utils.loadImage
 import com.example.mvvm_retrofit_room.view.base.BaseFragment
 import com.example.mvvm_retrofit_room.viewmodel.ExecuteBlogFragmentViewModel
+import com.example.myapplication.utils.ReusableFunctionForEdittext.clearAllEdittext
+import com.example.myapplication.utils.ReusableFunctionForEdittext.getAllEditText
 import com.example.myapplication.utils.ReusableFunctionForEdittext.hideKeyboardInFragment
+import com.example.myapplication.utils.ReusableFunctionForEdittext.isTextFullfill
 import com.google.android.material.textfield.TextInputEditText
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
@@ -27,7 +27,6 @@ import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
-import okhttp3.MultipartBody
 import java.io.File
 
 
@@ -38,8 +37,6 @@ class BlogExecuteFragment :
     private lateinit var mBlog: Blog
     private lateinit var mEditTextList: ArrayList<TextInputEditText>
 
-    private var mUploadURL: String? = null
-    private var mBlogImageURI: Uri? = null
     private lateinit var mImageFile: File
 
     override fun getLayoutId(): Int = R.layout.fragment_blog_execute
@@ -65,6 +62,9 @@ class BlogExecuteFragment :
             binding.btnDelete.visibility = View.GONE
             binding.btnEdit.visibility = View.GONE
         }
+
+        accessStateListener()
+        blogUploadableURLListener()
     }
 
     //về fragment list
@@ -77,104 +77,67 @@ class BlogExecuteFragment :
 
     //add data lên server
     fun addNewBlog() {
-        viewModel.getBlogUploadableURL(mImageFile.name).observe(viewLifecycleOwner, Observer {
-            it?.let { resource ->
-                when (resource.status) {
-                    Status.SUCCESS -> {
-                        customProgressDialog.dismiss()
-                        resource.data?.let {
-                            mUploadURL = it.blogImageUploadURL.split("amazonaws.com/")[1]
-                            putImageToServer(uploadURL = it.blogImageUploadURL,)
-                            Log.e("uploadURL ", mUploadURL.toString())
-                        }
-                    }
-                    Status.ERROR -> {
-                        if (!InternetConnection.isOnline(requireContext())) {
-                            showToast("Error: No internet connection")
-                        }
-                        customProgressDialog.dismiss()
-                    }
-                    Status.LOADING -> {
-                        customProgressDialog.setTitle("Adding, please wait...")
-                        customProgressDialog.show()
-                    }
-                }
-            }
-        })
+        if (isTextFullfill(
+                getAllEditText(
+                    binding.relativeContainer,
+                    mEditTextList
+                )
+            ) && mImageFile != null
+        ) {
+            customProgressDialog.setTitle("Adding, please wait...")
+            customProgressDialog.show()
 
-        /*if (isTextFullfill(getAllEditText(binding.relativeContainer, mEditTextList))) {
-            getNewBlog()
-            viewModel.addNewBlogToServer(mBlog).observe(viewLifecycleOwner, Observer {
-                it?.let { resource ->
-                    when (resource.status) {
-                        Status.SUCCESS -> {
-                            customProgressDialog.dismiss()
-                            showToast("Blog Added")
-                            backToBlogListFragment()
-                        }
-                        Status.ERROR -> {
-                            if (!InternetConnection.isOnline(requireContext())) {
-                                showToast("Error: No internet connection")
-                            } else {
-                                it.message?.let { it -> showToast(it) }
-                            }
-                            customProgressDialog.dismiss()
-                        }
-                        Status.LOADING -> {
-                            customProgressDialog.setTitle("Adding, please wait...")
-                            customProgressDialog.show()
-                        }
-                    }
-                }
-            })
+            viewModel.getBlogUploadableURL(mImageFile.name)
         } else {
             showToast("Error: Invalid text")
+            mEditTextList.clear()
+            clearAllEdittext(binding.relativeContainer)
         }
-        mEditTextList.clear()
-        clearAllEdittext(binding.relativeContainer)
-        view?.let { activity?.hideKeyboardInFragment(it) }*/
     }
 
-    fun putImageToServer(uploadURL: String) {
-        viewModel.uploadBlogImageToServer(uploadURL = uploadURL, imageFile = mImageFile)
-        viewModel.isImageUploaded.observe(viewLifecycleOwner, Observer {
-            if (it) {
-                Log.e("uploaded", "success")
-                Log.e("url =: ", uploadURL)
-                val imageURL = uploadURL.split("?X-Amz-Algorithm")[0]
-                mBlog.blogImageURL = imageURL
-                loadImage(binding.ivBlogImage, imageURL)
-            } else {
-                Log.e("uploaded", "fail")
+    //lấy url để upload ảnh
+    private fun blogUploadableURLListener() {
+        viewModel.blogUploadableURL.observe(viewLifecycleOwner, Observer {
+            val uploadURL = it.blogImageUploadURL
+            if(uploadURL.length > 0){
+                putImageToServer(uploadURL)
+            }else{
+                customProgressDialog.dismiss()
             }
-            customProgressDialog.dismiss()
         })
     }
 
     //xóa data trên server
     fun deleteCurrentBlog() {
-        viewModel.deleteCurrentBlog(mBlog.blogID).observe(viewLifecycleOwner, Observer {
-            it?.let { resource ->
-                when (resource.status) {
-                    Status.SUCCESS -> {
-                        customProgressDialog.dismiss()
-                        showToast("Deleted fail")
-                    }
-                    Status.ERROR -> {
-                        if (!InternetConnection.isOnline(requireContext())) {
-                            showToast("Error: No internet connection")
-                        } else {
-                            customProgressDialog.dismiss()
-                            showToast("Blog Deleted")
-                            view?.let { activity?.hideKeyboardInFragment(it) }
-                            backToBlogListFragment()
-                        }
-                    }
-                    Status.LOADING -> {
-                        customProgressDialog.setTitle("Deleting, please wait...")
-                        customProgressDialog.show()
-                    }
-                }
+        customProgressDialog.setTitle("Deleting, please wait...")
+        customProgressDialog.show()
+
+        viewModel.deleteCurrentBlog(mBlog.blogID)
+    }
+
+    //upload ảnh lên server
+    fun putImageToServer(uploadURL: String) {
+        viewModel.uploadBlogImageToServer(uploadURL = uploadURL, imageFile = mImageFile)
+        viewModel.isImageUploaded.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                val imageURL = uploadURL.split("?X-Amz-Algorithm")[0]
+                mBlog.blogImageURL = imageURL
+                getNewBlog()
+                viewModel.addNewBlogToServer(mBlog)
+            } else {
+                Log.e("uploaded", "fail")
+                customProgressDialog.dismiss()
+            }
+        })
+    }
+
+    //state khi thêm hoặc xóa data (success/failure)
+    private fun accessStateListener() {
+        viewModel.remoteDataAcessState.observe(viewLifecycleOwner, Observer {
+            view?.let { activity?.hideKeyboardInFragment(it) }
+            customProgressDialog.dismiss()
+            if (it) {
+                backToBlogListFragment()
             }
         })
     }
@@ -183,7 +146,6 @@ class BlogExecuteFragment :
     private fun getNewBlog() {
         mBlog.blogTitle = binding.titBlogTitle.text.toString()
         mBlog.blogDescription = binding.titBlogDescription.text.toString()
-        mBlog.blogImageURL = "any string"
     }
 
     fun onImageClicked() {
@@ -223,15 +185,10 @@ class BlogExecuteFragment :
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK) {
-
             data?.data.let {
-                mBlogImageURI = it
                 mImageFile = File(ImagePath.getPathFromUri(requireContext(), it!!))
-
-                //loadImage(binding.ivBlogImage, mImageFile.toString())
+                loadImage(binding.ivBlogImage, mImageFile.toString())
             }
         }
     }
-
-
 }
