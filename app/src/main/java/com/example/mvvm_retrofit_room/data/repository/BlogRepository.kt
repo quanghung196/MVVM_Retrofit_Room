@@ -6,6 +6,7 @@ import com.example.mvvm_retrofit_room.data.remote.BlogApiRetrofitBuilder
 import com.example.mvvm_retrofit_room.data.remote.ImageApiRetrofitBuilder
 import com.example.mvvm_retrofit_room.model.Blog
 import io.reactivex.rxjava3.core.Completable
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -33,8 +34,8 @@ class BlogRepository {
     fun getBlogUploadableURL(fileName: String) =
         BlogApiRetrofitBuilder.BLOG_API_SERVICE.getBlogUploadableURL(fileName = fileName)
 
-    fun putImageToServer(url: String, image: RequestBody) =
-        ImageApiRetrofitBuilder.IMAGE_API_SERVICE.putImageToServer(url = url, image = image)
+    fun putImageToServer(url: String, imageFile : MultipartBody.Part) =
+        ImageApiRetrofitBuilder.IMAGE_API_SERVICE.putImageToServer(url = url, imageFile = imageFile)
 
     //local data
     fun synchronizeAllBlogFromServer(blogs: List<Blog>) =

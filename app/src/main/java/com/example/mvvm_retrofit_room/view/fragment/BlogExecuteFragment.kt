@@ -122,11 +122,12 @@ class BlogExecuteFragment :
             if (it) {
                 val imageURL = uploadURL.split("?X-Amz-Algorithm")[0]
                 mBlog.blogImageURL = imageURL
+                Log.e("blogURL", imageURL)
                 getNewBlog()
                 viewModel.addNewBlogToServer(mBlog)
             } else {
                 Log.e("uploaded", "fail")
-                customProgressDialog.dismiss()
+                //customProgressDialog.dismiss()
             }
         })
     }

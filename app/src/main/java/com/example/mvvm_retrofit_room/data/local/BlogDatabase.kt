@@ -15,7 +15,7 @@ abstract class BlogDatabase : RoomDatabase() {
     abstract fun getBlogDAO(): BlogDAO
 
     companion object {
-        private val MIGRATION_2_3 = object : Migration(2, 3) {
+        private val MIGRATION_1_3 = object : Migration(1, 3) {
             override fun migrate(database: SupportSQLiteDatabase) {
             }
         }
@@ -31,7 +31,7 @@ abstract class BlogDatabase : RoomDatabase() {
                         BlogDatabase::class.java,
                         "BlogDatabase"
                     )
-                    //.addMigrations(MIGRATION_2_3)
+                    .addMigrations(MIGRATION_1_3)
                     .build()
             }
             return instance!!

@@ -12,10 +12,11 @@ import com.example.mvvm_retrofit_room.model.BlogImageUploadURL
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.observers.DisposableCompletableObserver
 import io.reactivex.rxjava3.schedulers.Schedulers
-import okhttp3.*
+import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
-
 import java.io.File
 
 
@@ -100,8 +101,9 @@ class ExecuteBlogFragmentViewModel(val context: Context) : ViewModel() {
         showToastMessage(throwawble.message.toString())
     }
 
+    //upload đây
     fun uploadBlogImageToServer(uploadURL: String, imageFile: File) {
-        val MEDIA_TYPE_IMAGE: MediaType? = "image/*".toMediaTypeOrNull()
+        /*val MEDIA_TYPE_IMAGE: MediaType? = "image/*".toMediaTypeOrNull()
 
         val requestBody: RequestBody = MultipartBody.Builder()
             .setType(MultipartBody.FORM)
@@ -110,10 +112,16 @@ class ExecuteBlogFragmentViewModel(val context: Context) : ViewModel() {
                 filename = imageFile.name,
                 body = imageFile.asRequestBody(MEDIA_TYPE_IMAGE)
             )
-            .build()
+            .build()*/
+
+         */
+        val requestFile = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), imageFile)
+
+        val imageFile: MultipartBody.Part =
+            MultipartBody.Part.createFormData("image", imageFile.getName(), requestFile)
 
         mBlogRepository
-            .putImageToServer(url = uploadURL, image = requestBody)
+            .putImageToServer(url = uploadURL, imageFile = imageFile)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeWith(object : DisposableCompletableObserver() {
