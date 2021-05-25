@@ -70,10 +70,6 @@ class BlogListFragment : BaseFragment<FragmentBlogListBinding, BlogListFragmentV
             Log.e("error","data change")
             Log.e("error","list size " + it.size.toString())
             mBlogAdapter.submitData(it)
-            if(InternetConnection.isOnline(requireContext())){
-                viewModel.deteleAllBlogFromDatabase()
-                viewModel.synchronizeAllBlogFromServer(it)
-            }
         })
     }
 

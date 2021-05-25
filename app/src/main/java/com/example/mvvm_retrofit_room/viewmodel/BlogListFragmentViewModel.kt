@@ -47,6 +47,8 @@ class BlogListFragmentViewModel(val context: Context) : ViewModel() {
         Log.e("error", "data response")
         _blogs.postValue(response)
         _loadingState.postValue(LoadingState(false, true))
+        deteleAllBlogFromDatabase()
+        synchronizeAllBlogFromServer(response)
     }
 
     private fun onFailure(throwable: Throwable) {
