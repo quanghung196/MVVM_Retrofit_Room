@@ -8,8 +8,8 @@ import retrofit2.http.*
 
 
 interface ImageApiService {
-    @Multipart
+
     @PUT
     fun putImageToServer(@Url url: String,
-                         @Part imageFile : MultipartBody.Part ) : Completable
+                         @Body imageFile : RequestBody ) : Completable
 }

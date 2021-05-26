@@ -2,8 +2,9 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-android-extensions'
-    id "androidx.navigation.safeargs.kotlin"
-    id "kotlin-kapt"
+    id 'androidx.navigation.safeargs.kotlin'
+    id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -95,8 +96,13 @@ dependencies {
     //reactiveX
     implementation 'io.reactivex.rxjava3:rxkotlin:3.0.1'
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
-    implementation "com.github.akarnokd:rxjava3-retrofit-adapter:3.0.0"
-    implementation "com.github.akarnokd:rxjava3-bridge:3.0.0"
+    implementation 'com.github.akarnokd:rxjava3-retrofit-adapter:3.0.0'
+    implementation 'com.github.akarnokd:rxjava3-bridge:3.0.0'
+
+    //firebase
+    implementation platform('com.google.firebase:firebase-bom:28.0.1')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-messaging:20.1.0'
 
     def multidex_version = "2.0.1"
     implementation("androidx.multidex:multidex:$multidex_version")

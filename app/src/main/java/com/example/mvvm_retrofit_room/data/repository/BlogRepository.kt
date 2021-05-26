@@ -34,7 +34,7 @@ class BlogRepository {
     fun getBlogUploadableURL(fileName: String) =
         BlogApiRetrofitBuilder.BLOG_API_SERVICE.getBlogUploadableURL(fileName = fileName)
 
-    fun putImageToServer(url: String, imageFile : MultipartBody.Part) =
+    fun putImageToServer(url: String, imageFile : RequestBody) =
         ImageApiRetrofitBuilder.IMAGE_API_SERVICE.putImageToServer(url = url, imageFile = imageFile)
 
     //local data

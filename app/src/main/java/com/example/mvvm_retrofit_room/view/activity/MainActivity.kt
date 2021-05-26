@@ -1,14 +1,18 @@
 package com.example.mvvm_retrofit_room.view.activity
 
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.setupWithNavController
 import com.example.mvvm_retrofit_room.R
 import com.example.mvvm_retrofit_room.databinding.ActivityMainBinding
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityMainBinding
@@ -25,6 +29,18 @@ class MainActivity : AppCompatActivity() {
 
         /*mBroadcastReceiver = NetworkReceiver()
         registerBroadcast()*/
+        getDeviceToken()
+    }
+
+    private fun getDeviceToken(): String {
+        var fbToken = ""
+        FirebaseMessaging.getInstance().token.addOnCompleteListener {
+            if (it.isComplete) {
+                fbToken = it.result.toString()
+                Log.e("fbToken", fbToken)
+            }
+        }
+        return fbToken
     }
 
     /*private fun registerBroadcast(){

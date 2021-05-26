@@ -1,6 +1,7 @@
 package com.example.mvvm_retrofit_room.viewmodel
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
@@ -9,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import com.example.mvvm_retrofit_room.data.repository.BlogRepository
 import com.example.mvvm_retrofit_room.model.Blog
 import com.example.mvvm_retrofit_room.model.BlogImageUploadURL
+import com.example.mvvm_retrofit_room.utils.Constants
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.observers.DisposableCompletableObserver
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -103,25 +105,11 @@ class ExecuteBlogFragmentViewModel(val context: Context) : ViewModel() {
 
     //upload đây
     fun uploadBlogImageToServer(uploadURL: String, imageFile: File) {
-        /*val MEDIA_TYPE_IMAGE: MediaType? = "image/*".toMediaTypeOrNull()
-
-        val requestBody: RequestBody = MultipartBody.Builder()
-            .setType(MultipartBody.FORM)
-            .addFormDataPart(
-                name = imageFile.name,
-                filename = imageFile.name,
-                body = imageFile.asRequestBody(MEDIA_TYPE_IMAGE)
-            )
-            .build()*/
-
-         */
-        val requestFile = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), imageFile)
-
-        val imageFile: MultipartBody.Part =
-            MultipartBody.Part.createFormData("image", imageFile.getName(), requestFile)
+        val MEDIA_TYPE_IMAGE: MediaType? = "image/*".toMediaTypeOrNull()
+        val uploadFile = imageFile.asRequestBody(MEDIA_TYPE_IMAGE)
 
         mBlogRepository
-            .putImageToServer(url = uploadURL, imageFile = imageFile)
+            .putImageToServer(url = uploadURL, imageFile = uploadFile)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeWith(object : DisposableCompletableObserver() {

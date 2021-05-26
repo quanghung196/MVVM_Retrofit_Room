@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "629388365470",
+    "project_id": "fcm-demo-12fdd",
+    "storage_bucket": "fcm-demo-12fdd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:629388365470:android:c4fd2ad643461e2c64b58f",
+        "android_client_info": {
+          "package_name": "com.example.mvvm_retrofit_room"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "629388365470-3kskhi4q34hutn0gvhiofg5et0orm6s5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mvvm_retrofit_room",
+            "certificate_hash": "5d274712cf16bdc68e60c7aa834003d95b61251e"
+          }
+        },
+        {
+          "client_id": "629388365470-cko1927jvf0lgilrq4n29r33b54hhrpv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0TODMyEfbdkQf_MlKNx7NWNJ5tssV_hk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "629388365470-cko1927jvf0lgilrq4n29r33b54hhrpv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
