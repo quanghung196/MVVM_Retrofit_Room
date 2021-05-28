@@ -24,7 +24,7 @@ class CustomProgressDialog(val activity: Activity) : Dialog(activity) {
 
         val window: Window? = getWindow()
         window!!.setBackgroundDrawableResource(android.R.color.transparent)
-        window!!.setLayout(
+        window.setLayout(
             WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.WRAP_CONTENT
         )

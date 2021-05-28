@@ -54,11 +54,10 @@ class BlogExecuteFragment :
         mEditTextList = ArrayList()
 
         if (mBlog.blogTitle.length > 0) {
-            setToolbarTitle("Edit Blog")
-            //binding.ivBlogImage.isEnabled = false
+            setToolbarTitle(getString(R.string.toolbar_title_edit_blog))
             binding.btnAdd.visibility = View.GONE
         } else {
-            setToolbarTitle("Add Blog")
+            setToolbarTitle(getString(R.string.toolbar_title_add_blog))
             binding.btnDelete.visibility = View.GONE
             binding.btnEdit.visibility = View.GONE
         }
@@ -84,12 +83,12 @@ class BlogExecuteFragment :
                 )
             ) && mImageFile != null
         ) {
-            customProgressDialog.setTitle("Adding, please wait...")
+            customProgressDialog.setTitle(getString(R.string.cpd_title_add))
             customProgressDialog.show()
 
             viewModel.getBlogUploadableURL(mImageFile.name)
         } else {
-            showToast("Error: Invalid text")
+            showToast(getString(R.string.msg_error_invalid_text))
             mEditTextList.clear()
             clearAllEdittext(binding.relativeContainer)
         }
@@ -109,7 +108,7 @@ class BlogExecuteFragment :
 
     //xóa data trên server
     fun deleteCurrentBlog() {
-        customProgressDialog.setTitle("Deleting, please wait...")
+        customProgressDialog.setTitle(getString(R.string.cpd_title_delete))
         customProgressDialog.show()
 
         viewModel.deleteCurrentBlog(mBlog.blogID)
@@ -122,19 +121,17 @@ class BlogExecuteFragment :
             if (it) {
                 val imageURL = uploadURL.split("?X-Amz-Algorithm")[0]
                 mBlog.blogImageURL = imageURL
-                Log.e("blogURL", imageURL)
                 getNewBlog()
                 viewModel.addNewBlogToServer(mBlog)
             } else {
-                Log.e("uploaded", "fail")
-                //customProgressDialog.dismiss()
+                customProgressDialog.dismiss()
             }
         })
     }
 
     //state khi thêm hoặc xóa data (success/failure)
     private fun accessStateListener() {
-        viewModel.remoteDataAcessState.observe(viewLifecycleOwner, Observer {
+        viewModel.remoteDataAccessState.observe(viewLifecycleOwner, Observer {
             view?.let { activity?.hideKeyboardInFragment(it) }
             customProgressDialog.dismiss()
             if (it) {
@@ -177,7 +174,7 @@ class BlogExecuteFragment :
                 }
 
                 override fun onPermissionDenied(response: PermissionDeniedResponse) {
-                    showToast("Permission Denied")
+                    showToast(getString(R.string.msg_permission_denied))
                 }
 
             }).check()

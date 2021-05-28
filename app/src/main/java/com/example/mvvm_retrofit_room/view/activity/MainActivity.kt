@@ -28,11 +28,11 @@ class MainActivity : AppCompatActivity() {
         mBinding.toolbarbMain.setupWithNavController(mNavController)
 
         /*mBroadcastReceiver = NetworkReceiver()
-        registerBroadcast()*/
-        getDeviceToken()
+        registerBroadcast()
+        getDeviceToken()*/
     }
 
-    private fun getDeviceToken(): String {
+    /*private fun getDeviceToken(): String {
         var fbToken = ""
         FirebaseMessaging.getInstance().token.addOnCompleteListener {
             if (it.isComplete) {
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         return fbToken
     }
 
-    /*private fun registerBroadcast(){
+    private fun registerBroadcast(){
         registerReceiver(mBroadcastReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
     }
 

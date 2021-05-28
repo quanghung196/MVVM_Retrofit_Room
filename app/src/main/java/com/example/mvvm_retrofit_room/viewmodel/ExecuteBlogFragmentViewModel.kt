@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.mvvm_retrofit_room.R
 import com.example.mvvm_retrofit_room.data.repository.BlogRepository
 import com.example.mvvm_retrofit_room.model.Blog
 import com.example.mvvm_retrofit_room.model.BlogImageUploadURL
@@ -31,9 +32,9 @@ class ExecuteBlogFragmentViewModel(val context: Context) : ViewModel() {
     val isImageUploaded: LiveData<Boolean>
         get() = _isImageUploaded
 
-    private val _remoteDataAcessState = MutableLiveData<Boolean>()
-    val remoteDataAcessState: LiveData<Boolean>
-        get() = _remoteDataAcessState
+    private val _remoteDataAccessState = MutableLiveData<Boolean>()
+    val remoteDataAccessState: LiveData<Boolean>
+        get() = _remoteDataAccessState
 
     private val _blogUploadableURL = MutableLiveData<BlogImageUploadURL>()
     val blogUploadableURL: LiveData<BlogImageUploadURL>
@@ -51,12 +52,12 @@ class ExecuteBlogFragmentViewModel(val context: Context) : ViewModel() {
             .subscribeWith(object : DisposableCompletableObserver() {
                 override fun onComplete() {
                     setAccessState(isSuccessful = true)
-                    showToastMessage("Blog was added")
+                    showToastMessage(context.getString(R.string.msg_blog_add_success))
                 }
 
                 override fun onError(e: Throwable) {
                     setAccessState(isSuccessful = false)
-                    showToastMessage("Blog wasn't added " + e.message)
+                    showToastMessage(context.getString(R.string.msg_blog_add_fail) + "\n" + e.message)
                 }
             })
     }
@@ -69,18 +70,18 @@ class ExecuteBlogFragmentViewModel(val context: Context) : ViewModel() {
             .subscribeWith(object : DisposableCompletableObserver() {
                 override fun onComplete() {
                     setAccessState(isSuccessful = true)
-                    showToastMessage("Blog was deleted")
+                    showToastMessage(context.getString(R.string.msg_blog_delete_success))
                 }
 
                 override fun onError(e: Throwable) {
                     setAccessState(isSuccessful = false)
-                    showToastMessage("Blog wasn't not deleted " + e.message)
+                    showToastMessage(context.getString(R.string.msg_blog_delete_fail) + "\n" + e.message)
                 }
             })
     }
 
     private fun setAccessState(isSuccessful: Boolean) {
-        _remoteDataAcessState.postValue(isSuccessful)
+        _remoteDataAccessState.postValue(isSuccessful)
     }
 
     //get image upload url
@@ -103,7 +104,7 @@ class ExecuteBlogFragmentViewModel(val context: Context) : ViewModel() {
         showToastMessage(throwawble.message.toString())
     }
 
-    //upload đây
+    //upload image
     fun uploadBlogImageToServer(uploadURL: String, imageFile: File) {
         val MEDIA_TYPE_IMAGE: MediaType? = "image/*".toMediaTypeOrNull()
         val uploadFile = imageFile.asRequestBody(MEDIA_TYPE_IMAGE)
@@ -118,7 +119,6 @@ class ExecuteBlogFragmentViewModel(val context: Context) : ViewModel() {
                 }
 
                 override fun onError(e: Throwable) {
-                    Log.e("image upload failure", e.message.toString())
                     _isImageUploaded.postValue(false)
                 }
             })

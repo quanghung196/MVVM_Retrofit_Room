@@ -13,5 +13,4 @@ import android.provider.MediaStore
 object Constants {
     const val GALLERY_REQUEST_CODE = 123
 
-
 }

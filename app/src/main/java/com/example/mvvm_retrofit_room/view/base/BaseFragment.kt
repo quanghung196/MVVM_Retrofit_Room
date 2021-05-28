@@ -24,15 +24,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
 
-abstract class BaseFragment<V : ViewDataBinding, VM : ViewModel> : Fragment(), CoroutineScope {
+abstract class BaseFragment<V : ViewDataBinding, VM : ViewModel> : Fragment(){
     protected lateinit var binding: V
     protected lateinit var viewModel: VM
 
-    private lateinit var job: Job
     protected lateinit var customProgressDialog: CustomProgressDialog
-
-    override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.Main
 
     abstract fun getLayoutId(): Int
     abstract fun getViewModel(): Class<VM>
@@ -45,7 +41,6 @@ abstract class BaseFragment<V : ViewDataBinding, VM : ViewModel> : Fragment(), C
     ): View? {
         binding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false)
         binding.lifecycleOwner = this
-        job = Job()
 
         viewModel = ViewModelProvider(this, ViewModelFactory(requireContext())).get(getViewModel())
 
@@ -65,10 +60,5 @@ abstract class BaseFragment<V : ViewDataBinding, VM : ViewModel> : Fragment(), C
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onViewReady()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        job.cancel()
     }
 }

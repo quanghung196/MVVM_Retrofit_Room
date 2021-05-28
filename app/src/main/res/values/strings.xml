@@ -8,5 +8,18 @@
     <string name="btn_action_add">Add</string>
     <string name="btn_action_edit">Edit</string>
     <string name="btn_action_delete">Delete</string>
-    <string name="progress_dialog_title">Please wait...</string>
+    <string name="cpd_title">Please wait...</string>
+    <string name="status_network_connected">Network connected</string>
+    <string name="status_network_disconnected">Network disconnected</string>
+    <string name="toolbar_title_list_blog">List Blog</string>
+    <string name="toolbar_title_edit_blog">Edit Blog</string>
+    <string name="toolbar_title_add_blog">Add Blog</string>
+    <string name="cpd_title_add">Adding, please wait...</string>
+    <string name="msg_error_invalid_text">Error: Invalid text</string>
+    <string name="cpd_title_delete">Deleting, please wait...</string>
+    <string name="msg_permission_denied">Permission Denied</string>
+    <string name="msg_blog_add_success">Blog was added</string>
+    <string name="msg_blog_add_fail">\"Blog wasn\'t added \"</string>
+    <string name="msg_blog_delete_success">Blog was deleted</string>
+    <string name="msg_blog_delete_fail">\"Blog wasn\'t deleted \"</string>
 </resources>

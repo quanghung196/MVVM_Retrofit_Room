@@ -23,16 +23,16 @@ class BlogRepository {
 
     //remote data
     fun getAllBlogFromServer() =
-        BlogApiRetrofitBuilder.BLOG_API_SERVICE.getAllBlog()
+        BlogApiRetrofitBuilder.blogApiService.getAllBlog()
 
     fun addBlogToServer(blog: Blog) =
-        BlogApiRetrofitBuilder.BLOG_API_SERVICE.addBlog(blog = blog)
+        BlogApiRetrofitBuilder.blogApiService.addBlog(blog = blog)
 
     fun deteteBlogOnServer(blogID: String) =
-        BlogApiRetrofitBuilder.BLOG_API_SERVICE.deleteBlog(blogID = blogID)
+        BlogApiRetrofitBuilder.blogApiService.deleteBlog(blogID = blogID)
 
     fun getBlogUploadableURL(fileName: String) =
-        BlogApiRetrofitBuilder.BLOG_API_SERVICE.getBlogUploadableURL(fileName = fileName)
+        BlogApiRetrofitBuilder.blogApiService.getBlogUploadableURL(fileName = fileName)
 
     fun putImageToServer(url: String, imageFile : RequestBody) =
         ImageApiRetrofitBuilder.IMAGE_API_SERVICE.putImageToServer(url = url, imageFile = imageFile)

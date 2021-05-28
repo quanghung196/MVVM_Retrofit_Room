@@ -28,7 +28,7 @@ class BlogListFragment : BaseFragment<FragmentBlogListBinding, BlogListFragmentV
         binding.handleBlogListFrmEvent = this
 
         setHasOptionsMenu(true)
-        setToolbarTitle("List Blog")
+        setToolbarTitle(getString(R.string.toolbar_title_list_blog))
 
         viewModel.setBlogListener(this)
 
@@ -67,8 +67,6 @@ class BlogListFragment : BaseFragment<FragmentBlogListBinding, BlogListFragmentV
 
     private fun dataListener(){
         viewModel.blogs.observe(viewLifecycleOwner, Observer {
-            Log.e("error","data change")
-            Log.e("error","list size " + it.size.toString())
             mBlogAdapter.submitData(it)
         })
     }

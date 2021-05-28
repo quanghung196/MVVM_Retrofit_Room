@@ -8,7 +8,9 @@ import com.example.mvvm_retrofit_room.model.Blog
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 
-
+/*
+* interface BlogDAO chứa các method dùng để truy xuất data trong database
+* */
 @Dao
 interface BlogDAO {
 

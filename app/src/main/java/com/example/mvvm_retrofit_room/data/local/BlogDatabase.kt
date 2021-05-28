@@ -9,6 +9,9 @@ import com.example.mvvm_retrofit_room.data.local.dao.BlogDAO
 import com.example.mvvm_retrofit_room.model.Blog
 import com.example.mvvm_retrofit_room.utils.MyApp
 
+/*
+* Class BlogDatabase sử dụng để khởi tạo database
+* */
 @Database(entities = [Blog::class], version = 3, exportSchema = false)
 abstract class BlogDatabase : RoomDatabase() {
 

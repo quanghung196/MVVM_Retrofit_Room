@@ -20,6 +20,5 @@ class BlogAdapter(val blogListFragmentViewModel: BlogListFragmentViewModel) :
         binding.blog = currentBlog
         binding.viewModel = blogListFragmentViewModel
         binding.executePendingBindings()
-
     }
 }

@@ -7,6 +7,9 @@ import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Observable
 import retrofit2.http.*
 
+/*
+* interface BlogApiServive chứa các endpoints để xử lí dữ liệu trên server
+* */
 interface BlogApiService {
 
     //@Headers("x-api-key: " + RetrofitBuilder.HEADER_X_API_KEY)
